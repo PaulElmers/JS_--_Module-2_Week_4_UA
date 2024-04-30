@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Демо HTML створений за допомогою JavaScript</title>
+</head>
+<body>
+    <script>
+        class HtmlElement {
+            constructor(tagName, selfClosing = false) {
+                this.tagName = tagName;
+                this.selfClosing = selfClosing;
+                this.textContent = '';
+                this.attributes = [];
+                this.styles = [];
+                this.children = [];
+            }
+
+            setAttribute(name, value) {
+                this.attributes.push({ name, value });
+            }
+
+            setStyle(property, value) {
+                this.styles.push({ property, value });
+            }
+
+            appendChild(child) {
+                this.children.push(child);
+            }
+
+            prependChild(child) {
+                this.children.unshift(child);
+            }
+
+            getHtml() {
+                const attributesHtml = this.attributes.map(attr => `${attr.name}="${attr.value}"`).join(' ');
+                const stylesHtml = this.styles.map(style => `${style.property}: ${style.value};`).join(' ');
+
+                let html = `<${this.tagName}`;
+
+                if (attributesHtml) {
+                    html += ` ${attributesHtml}`;
+                }
+
+                if (stylesHtml) {
+                    html += ` style="${stylesHtml}"`;
+                }
+
+                if (this.selfClosing) {
+                    html += ' />';
+                } else {
+                    html += '>';
+
+                    if (this.textContent) {
+                        html += this.textContent;
+                    }
+
+                    for (const child of this.children) {
+                        html += child.getHtml();
+                    }
+
+                    html += `</${this.tagName}>`;
+                }
+
+                return html;
+            }
+        }
+
+        const wrapper = new HtmlElement('div');
+        const heading = new HtmlElement('h1');
+        const paragraph = new HtmlElement('p');
+        const link = new HtmlElement('a', false); 
+
+        heading.textContent = 'Hello world!';
+        paragraph.textContent = 'Це приклад створення HTML за допомогою JavaScript.';
+
+        link.setAttribute('href', 'https://www.example.com');
+        link.setAttribute('target', '_blank');
+        link.textContent = 'Посилання на приклад';
+
+        wrapper.appendChild(heading);
+        wrapper.appendChild(paragraph);
+        wrapper.appendChild(link);
+
+        const wrapperHtml = wrapper.getHtml();
+
+        document.write(wrapperHtml);
+    </script>
+</body>
+</html>

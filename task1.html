@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Example</title>
+</head>
+<body>
+    <h1>Circle Example</h1>
+
+    <script>
+        class Circle {
+            constructor(radius) {
+                this._radius = radius;
+            }
+
+            get radius() {
+                return this._radius;
+            }
+
+            set radius(radius) {
+                if (radius <= 0) {
+                    throw new Error('Радіус має бути додатнім числом');
+                }
+                this._radius = radius;
+            }
+
+        
+            get diameter() {
+                return this._radius * 2;
+            }
+
+           
+            calculateArea() {
+                return Math.PI * this._radius ** 2;
+            }
+
+          
+            calculatePerimeter() {
+                return 2 * Math.PI * this._radius;
+            }
+        }
+
+        const myCircle = new Circle(5); 
+
+        document.write("<p>Радіус кола: " + myCircle.radius + "</p>");
+        document.write("<p>Діаметр кола: " + myCircle.diameter + "</p>");
+        document.write("<p>Площа кола: " + myCircle.calculateArea() + "</p>");
+        document.write("<p>Довжина кола: " + myCircle.calculatePerimeter() + "</p>");
+
+        myCircle.radius = 7;
+        document.write("<p>Новий радіус кола: " + myCircle.radius + "</p>");
+        document.write("<p>Новий діаметр кола: " + myCircle.diameter + "</p>");
+        document.write("<p>Нова площа кола: " + myCircle.calculateArea() + "</p>");
+        document.write("<p>Нова довжина кола: " + myCircle.calculatePerimeter() + "</p>");
+
+        try {
+            myCircle.radius = -2;
+            document.write("<p>Цей рядок не буде відображений через помилку</p>");
+        } catch (error) {
+            document.write("<p><strong>Помилка:</strong> " + error.message + "</p>");
+        }
+    </script>
+</body>
+</html>

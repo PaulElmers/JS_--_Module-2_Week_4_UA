@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Block Example</title>
+    <script>
+        class CssClass {
+            constructor(className, styles) {
+                this.className = className;
+                this.styles = styles;
+            }
+
+            getStyleString() {
+                let styleString = "";
+                for (const [property, value] of Object.entries(this.styles)) {
+                    styleString += `${property}: ${value}; `;
+                }
+                return styleString.trim();
+            }
+        }
+
+        class HtmlElement {
+            constructor(tagName, attributes = {}, children = []) {
+                this.tagName = tagName;
+                this.attributes = attributes;
+                this.children = children;
+            }
+
+            generateHtml() {
+                let attributeString = Object.entries(this.attributes)
+                    .map(([key, value]) => `${key}="${value}"`)
+                    .join(" ");
+
+                let html = `<${this.tagName} ${attributeString}>`;
+
+                for (const child of this.children) {
+                    if (child instanceof HtmlElement) {
+                        html += child.generateHtml();
+                    } else {
+                        html += child;
+                    }
+                }
+
+                html += `</${this.tagName}>`;
+
+                return html;
+            }
+        }
+
+        class HtmlBlock {
+            constructor(cssClasses, rootElement) {
+                this.cssClasses = cssClasses;
+                this.rootElement = rootElement;
+            }
+
+            getCode() {
+                let styleTags = '<style>';
+                for (const cssClass of this.cssClasses) {
+                    styleTags += `.${cssClass.className} { ${cssClass.getStyleString()} }`;
+                }
+                styleTags += '</style>';
+
+                const htmlContent = this.rootElement.generateHtml();
+                return `${styleTags}${htmlContent}`;
+            }
+        }
+
+        const cssClass1 = new CssClass('box', { 'background-color': 'lightblue', 'padding': '20px' });
+        const cssClass2 = new CssClass('heading', { 'color': 'darkblue', 'font-size': '24px' });
+
+        const rootElement = new HtmlElement('div', {}, [
+            new HtmlElement('h1', { 'class': 'heading' }, ['Hello, World!']),
+            new HtmlElement('p', {}, ['This is a sample HTML block.']),
+            new HtmlElement('div', { 'class': 'box' }, ['This is a box with some content.'])
+        ]);
+
+        const htmlBlock = new HtmlBlock([cssClass1, cssClass2], rootElement);
+
+        const generatedHtml = htmlBlock.getCode();
+
+        document.write(generatedHtml);
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
+s

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Class Example</title>
+    <style>
+        .myClass {
+            font-size: 20px;
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML Page with CSS Class</h1>
+
+    <p>This paragraph uses the CSS class <span class="myClass">myClass</span>.</p>
+
+    <script>
+        class CssClass {
+            constructor(className) {
+                this.className = className;
+                this.styles = {}; 
+            }
+        
+            setStyle(property, value) {
+                this.styles[property] = value;
+            }
+
+            removeStyle(property) {
+                if (this.styles.hasOwnProperty(property)) {
+                    delete this.styles[property];
+                }
+            }
+
+            getCss() {
+                let cssString = `.${this.className} {`;
+
+                for (const property in this.styles) {
+                    if (this.styles.hasOwnProperty(property)) {
+                        cssString += `${property}: ${this.styles[property]}; `;
+                    }
+                }
+
+                cssString += `}`;
+                return cssString;
+            }
+        }
+
+        const myClass = new CssClass("myClass");
+        myClass.setStyle("font-size", "16px");
+        myClass.setStyle("color", "red");
+
+        const cssCode = myClass.getCss();
+        const styleElement = document.createElement("style");
+        styleElement.textContent = cssCode;
+        document.head.appendChild(styleElement);
+    </script>
+</body>
+</html>
